@@ -1,0 +1,74 @@
+﻿<mxGraphModel>
+  <root>
+    <Diagram label="My Diagram" href="http://www.mxgraph.com/" name="" id="0">
+      <mxCell/>
+    </Diagram>
+    <Layer label="Default Layer" id="1">
+      <mxCell parent="0"/>
+    </Layer>
+    <Rect label="总经理审核" href="" id="51">
+      <mxCell parent="1" vertex="1" mystate="初始态">
+        <mxGeometry x="210" y="130" width="80" height="40" as="geometry"/>
+      </mxCell>
+    </Rect>
+    <Shape label="开始" href="" id="52">
+      <mxCell style="ellipse" parent="1" vertex="1" mystate="初始态">
+        <mxGeometry x="70" y="120" width="60" height="60" as="geometry"/>
+      </mxCell>
+    </Shape>
+    <mxCell id="53" value="" parent="1" source="52" target="51" edge="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <Rect label="个部门领&#xa;导查看" href="" id="54">
+      <mxCell parent="1" vertex="1" mystate="初始态">
+        <mxGeometry x="400" y="80" width="80" height="40" as="geometry"/>
+      </mxCell>
+    </Rect>
+    <Rect label="人力资源&#xa;部招收" href="" id="55">
+      <mxCell parent="1" vertex="1" mystate="初始态">
+        <mxGeometry x="400" y="180" width="80" height="40" as="geometry"/>
+      </mxCell>
+    </Rect>
+    <mxCell id="56" value="" parent="1" source="51" target="54" edge="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="57" value="" parent="1" source="51" target="55" edge="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <Rect label="部门人员实施" href="" id="58">
+      <mxCell parent="1" vertex="1" mystate="初始态">
+        <mxGeometry x="560" y="80" width="80" height="40" as="geometry"/>
+      </mxCell>
+    </Rect>
+    <mxCell id="59" value="" parent="1" source="54" target="58" edge="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <Rect label="新职工验收" href="" id="62">
+      <mxCell parent="1" vertex="1" mystate="初始态">
+        <mxGeometry x="560" y="180" width="80" height="40" as="geometry"/>
+      </mxCell>
+    </Rect>
+    <mxCell id="63" value="" parent="1" source="55" target="62" edge="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <Rect label="汇报" href="" id="64">
+      <mxCell parent="1" vertex="1" mystate="初始态">
+        <mxGeometry x="720" y="130" width="80" height="40" as="geometry"/>
+      </mxCell>
+    </Rect>
+    <mxCell id="65" value="" parent="1" source="58" target="64" edge="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="66" value="" parent="1" source="62" target="64" edge="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <Shape label="结束" href="" id="67">
+      <mxCell style="ellipse" parent="1" vertex="1" mystate="初始态">
+        <mxGeometry x="880" y="120" width="60" height="60" as="geometry"/>
+      </mxCell>
+    </Shape>
+    <mxCell id="68" value="" parent="1" source="64" target="67" edge="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+  </root>
+</mxGraphModel>

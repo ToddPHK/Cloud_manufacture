@@ -1,0 +1,183 @@
+﻿//var Key1_Store = new Ext.data.SimpleStore({
+//    fields: ['id', 'genre'],
+//    data: [['0', '名称'], ['1', '地区'], ['2', '类型'], ['3', '注册时间'], ['4', '服务得分']]
+//});
+var Condition_Store = new Ext.data.SimpleStore({
+    fields: ['id', 'genre'],
+    data: [['and', '与'], ['or', '或'], ['not', '非']]
+});
+//------------------------------------检索1-----------------------------------------
+var key1_Field = new Ext.form.TextField({
+    name: "key1_serveName",
+    fieldLabel: "名称",
+    width: 176,
+    allowBlank: true
+   // blankText: "请输入用户名！"
+});  
+    var Condition1_Combo = new Ext.form.ComboBox({
+    store: Condition_Store,
+    displayField: 'genre',
+    hiddenName: 'key1_Condition1',
+    valueField:'id',
+    mode: 'local',
+    triggerAction: 'all',
+    width: 60
+
+});
+//--------------------------------------检索2---------------------------------------
+
+var key2_Field = new Ext.form.TextField({
+    name: "key2_Type",
+    fieldLabel: "类型",
+    width: 176,
+    allowBlank: true
+    // blankText: "请输入用户名！"
+});
+var Condition2_Combo = new Ext.form.ComboBox({
+    store: Condition_Store,
+    displayField: 'genre',
+    hiddenName: 'key2_Condition2',
+    valueField: 'id',
+    mode: 'local',
+    triggerAction: 'all',
+    width: 60
+
+});
+//--------------------------------------检索3---------------------------------------
+
+var key3_Field = new Ext.form.TextField({
+    name: "key3_Region",
+    fieldLabel: "地区",
+    width: 176,
+    allowBlank: true
+});
+var Condition3_Combo = new Ext.form.ComboBox({
+    store: Condition_Store,
+    displayField: 'genre',
+    hiddenName: 'key3_Condition3',
+    valueField: 'id',
+    mode: 'local',
+    triggerAction: 'all',
+    width: 60
+
+});
+//--------------------------------------检索4--------------------------------------
+var KeyDate_Store = new Ext.data.SimpleStore({
+    fields: ['id', 'genre'],
+    data: [['0', '>='], ['1', '<=']]
+});
+var ConditionDate_Combo = new Ext.form.ComboBox({
+    store: KeyDate_Store,
+    name: "key4_DateCondition4",
+    // submitValue:false,
+    displayField: 'genre',
+    mode: 'local',
+    triggerAction: 'all',
+    width: 50
+
+});
+var key4_Field = new Ext.form.DateField({
+    name: "key4_RegisterDate",
+    format: 'Y-m-d H:i:s',
+    width: 176,
+    allowBlank: true
+});
+var Condition4_Combo = new Ext.form.ComboBox({
+    store: Condition_Store,
+    displayField: 'genre',
+    valueField: 'id',
+    mode: 'local',
+    triggerAction: 'all',
+    width: 60
+
+});
+//--------------------------------------------------------------------
+var AdvancedSearchPanel = new Ext.form.FormPanel({
+    frame: true,
+   //height: 300,
+    region: 'right',
+    layout: "form", // 整个大的表单是form布局
+    buttonAlign: 'center',
+    labelAlign: "left",
+    buttons: [{
+        text: "检索",
+        // width: 60,
+        handler: function () { advancedSearch(); }
+    }],
+    items: [{ // 行2
+        layout: "column",
+        items: [{
+            layout: "form",
+            labelWidth: 72,
+            items: [key1_Field]
+        }, {
+            layout: "form",
+            labelWidth: 2,
+            items: [Condition1_Combo]
+        }]
+    }, { // 行2
+        layout: "column",
+        items: [{
+            layout: "form",
+            labelWidth: 72,
+            items: [key2_Field]
+        }, {
+            layout: "form",
+            labelWidth: 2,
+            items: [Condition2_Combo]
+        }]
+    }, { // 行3
+        layout: "column",
+        items: [{
+            layout: "form",
+            labelWidth: 72,
+            items: [key3_Field]
+        }, {
+            layout: "form",
+            labelWidth: 2,
+            items: [Condition3_Combo]
+        }]
+    }, { // 
+        layout: "column",
+        items: [{
+            xtype: 'label',
+            text: '注册时间：',
+            width: 70,
+            name: 'xingMing'
+
+        }, {
+            layout: "form",
+            labelWidth: 2,
+            items: [ConditionDate_Combo]
+        }, {
+            layout: "form",
+            labelWidth: 2,
+            items: [key4_Field]
+        }/*, {
+            layout: "form",
+            labelWidth: 2,
+            items: [Condition4_Combo]
+        }*/]
+    }]
+});
+
+function advancedSearch() {
+
+    Alternate_ServeStore.removeAll();
+    Alternate_ServeStore.baseParams.OperateType = "SearchServe";
+    Alternate_ServeStore.baseParams.key1_serveName = key1_Field.getValue();
+    Alternate_ServeStore.baseParams.key1_Condition1 = Condition1_Combo.getValue();
+
+    Alternate_ServeStore.baseParams.key2_Type = key2_Field.getValue()
+    Alternate_ServeStore.baseParams.key2_Condition2 = Condition2_Combo.getValue();
+
+    Alternate_ServeStore.baseParams.key3_Region = key3_Field.getValue();
+    Alternate_ServeStore.baseParams.key3_Condition3 = Condition3_Combo.getValue();
+
+    Alternate_ServeStore.baseParams.key4_RegisterDate = key4_Field.getValue();
+    Alternate_ServeStore.baseParams.key4_DateCondition4 = ConditionDate_Combo.getRawValue();
+
+
+    Alternate_ServeStore.load();
+    Alternate_ServeStore.reload();
+}

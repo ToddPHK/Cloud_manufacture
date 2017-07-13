@@ -1,0 +1,86 @@
+﻿var Service_Window = new Ext.Window({
+    collapsible: true,
+    id: 'TaskCreate_Window',
+    maximizable: true,
+    layout: 'border',
+    width: 850,
+    height: 500,
+    modal: false,
+    closeAction: "hide",
+    plain: true,
+    title: '编辑对话框',
+    buttonAlign: 'center',
+    items: [taskDetailPanel, StandardTaskTreePanel],
+    buttons: [{
+        text: '保存',
+        //点击保存按钮后触发事件  
+        handler: function () {
+            if (OperateType == "Createtask")
+                SubmitTask();
+            else if (OperateType == "EditTask")
+                SaveEditedTask();
+        }
+    }]
+});
+
+var prjreader = new Ext.data.JsonReader(
+                    { root: 'rows', totalProperty: 'results' },
+                        [
+                        { name: "序号" },
+                         { name: "项目编号" },
+                         { name: "创建日期" },
+                         { name: "项目名称" },
+                         { name: "项目类型" },
+                         { name: "TypeText" },
+                         { name: "项目客户名称" },
+                         { name: "项目状态" },
+                         { name: "StateText" },
+                         { name: "项目计划开始日期" },
+                         { name: "项目实际开始日期" },
+                         { name: "项目计划结束日期" },
+                         { name: "项目实际结束日期" },
+                         { name: "项目负责人" },
+                         { name: "项目创建人" },
+                         { name: "PrjCreator" },
+                         { name: "人员名称" },
+                         { name: "项目简介" }
+                        ]
+                    );
+
+var prjstore = new Ext.data.Store(
+                        { id: 'prjstore', proxy: prjproxy, reader: prjreader }
+                    );
+var prjTableTanel_sm = new Ext.grid.CheckboxSelectionModel({ singleSelect: false });
+var prjTableTanel = new Ext.grid.GridPanel({
+    title: '项目管理',
+    id: "prjTableTanel",
+    //  viewConfig: { autoFill: true },
+    region: 'center',
+    frame: true,
+    store: prjstore,
+    tbar: prjtbar,
+    bbar: prjpageBar,
+    sm: prjTableTanel_sm,
+    loadMask: true,
+    listeners: {//监听
+        "rowdblclick": prjDataEdit
+    },
+    columns: [
+                    new Ext.grid.RowNumberer(),
+                   prjTableTanel_sm,
+    // { header: 'id', dataIndex: '序号', sortable: true },
+                    {header: '项目名称', dataIndex: '项目名称', sortable: true },
+                    { header: '项目负责人', dataIndex: '人员名称', sortable: true },
+                    { header: '项目创建人', dataIndex: 'PrjCreator', sortable: true },
+                    { header: '项目客户', dataIndex: '项目客户名称', sortable: true },
+                    { header: '项目类型', dataIndex: 'TypeText', sortable: true },
+                    { header: '项目编号', dataIndex: '项目编号', sortable: true },
+                    { header: '项目状态', dataIndex: 'StateText', sortable: true, renderer: showState },
+                    { header: '创建日期', dataIndex: '创建日期', sortable: true },
+                    { header: '项目计划开始日期', dataIndex: '项目计划开始日期', sortable: true },
+                    { header: '项目实际开始日期', dataIndex: '项目实际开始日期', sortable: true },
+                    { header: '项目计划结束日期', dataIndex: '项目计划结束日期', sortable: true },
+                    { header: '项目实际结束日期', dataIndex: '项目实际结束日期', sortable: true }
+    //{ header: '项目简介', dataIndex: '项目简介', sortable: true }
+            ]
+});

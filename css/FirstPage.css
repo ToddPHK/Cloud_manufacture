@@ -1,0 +1,27 @@
+﻿body {
+}
+
+#headTable
+{
+    border:0;
+    width:100%;
+    height:100%; 
+    background-image:url("../images/head.jpg");
+}
+
+#title{
+    padding-left: 15px;
+    font-family: 华文彩云; 
+    font-size: xx-large; 
+    color: #FFFFFF; 
+    font-style: normal; 
+    letter-spacing: 40px;
+}
+
+#showDate{
+    padding-right: 5px;
+}
+
+.banner td{
+    margin:3px;
+}

@@ -1,0 +1,182 @@
+﻿var WFPageSize = 10, prjGroupOperaType;
+
+var WorkFlowtbar = new Ext.Toolbar({
+    items: [{
+        id: 'WFtbar',
+        text: "添加",
+        iconCls: 'add16',
+        handler: function () {
+            NewprjGroupFormPanel.getForm().reset();
+            prjProjectListArrayStore.load({ params: {type:'ProjectList'} });
+            prjProjectListCombo.store.load({ params: {type:'ProjectList'} });
+            prjGroupAdd_Window.show();
+
+            prjGroupAdd_Window.setTitle("添加新项目组");
+            prjGroupOperaType = 'AddGroup';
+        }
+
+    }, '-', {
+        id: 'prjGroupbtnEdit',
+        text: "编辑",
+        handler: prjGroupDataEdit
+    }, '-', {
+        id: 'prjGroupbtnDel',
+        text: "删除",
+        handler: function () {
+            //做删除的操作?");
+            prjGroupOperaType = 'DeleteGroup';
+            rows = Ext.getCmp("prjGroupTablePanel").getSelectionModel().getSelections();
+            if (rows.length == 0) {
+                Ext.Msg.alert("", "请至少选择一行你要删除的数据！");
+                return;
+            }
+            Ext.MessageBox.confirm('提示', '确实要删除所选的记录吗?', prjGroupDelete);
+
+        }
+
+    }, '->', new Ext.Toolbar.TextItem('项目组名称：'), { xtype: 'textfield', id: 'prjGroupSearch' }, {
+        id: 'prjGroupbtnSearch',
+        text: "搜索",
+        handler: prjGroupDataSearch
+    }]
+
+});
+function prjGroupDataEdit() {
+    rows = Ext.getCmp("prjGroupTablePanel").getSelectionModel().getSelections();
+    if (rows.length !== 1) {
+        Ext.Msg.alert("提示", "请你选择一行数据进行操作！");
+        return;
+    }
+    prjGroupEditFormPanel.getForm().reset();
+    prjGroupEdit_Window.show();
+    prjGroupEdit_Window.setTitle("修改项目组");
+    //将选中项的信息绑定到TextField中
+    prjGroupEditFormPanel.getForm().findField('ID').setValue(rows[0].get('ID'));
+    prjGroupEditFormPanel.getForm().findField('prjGroupName').setValue(rows[0].get('项目组名称'));
+    prjGroupEditFormPanel.getForm().findField('prjGroupCodeNumber').setValue(rows[0].get('项目组编号'));
+    prjGroupEditFormPanel.getForm().findField('BelongprjName').setValue(rows[0].get('项目名称'));
+    prjGroupEditFormPanel.getForm().findField('PeopleInCharge').setValue(rows[0].get('负责人'));
+    prjGroupEditFormPanel.getForm().findField('prjGroupAuthority').setValue(rows[0].get('项目组权限'));
+    prjGroupEditFormPanel.getForm().findField('prjGroupCreateDate').setRawValue(rows[0].get('项目组创建日期'));
+    prjGroupEditFormPanel.getForm().findField('prjGroupTaskDescription').setValue(Ext.util.Format.htmlDecode(unescape(rows[0].get('任务描述'))));
+    prjGroupEditFormPanel.getForm().findField('prjGroupComments').setRawValue(Ext.util.Format.htmlDecode(unescape(rows[0].get('项目组备注'))));
+    //------------------------------
+    prjGroupOperaType = 'EditGroup';
+}
+function prjGroupDataSearch() {
+    var prjGroupName = prjGrouptbar.findById('prjGroupSearch').getValue();
+    prjGroupOperaType = 'GroupSearch';
+    // Ext.Msg.alert("", prjname);
+    prjGroupStore.load({ params: { start: 0, limit: prjGroupPageSize, prjGroupOperaType: prjGroupOperaType, prjGroupName: prjGroupName} });
+}
+function prjGroupDelete(btn) {
+    if (btn == 'yes') {
+        var NodeID;
+        var rows = Ext.getCmp("prjGroupTablePanel").getSelectionModel().getSelections();
+        for (var i = 0, len = rows.length; i < len; i++) {
+            if (rows.length == 0) {
+                NodeID = rows[i].get('ID');
+            }
+            else {
+                if (i == 0) {
+                    NodeID = rows[i].get('ID');
+                }
+                else
+                    NodeID += "," + rows[i].get('ID');
+            }
+
+        }
+        var jsonData = { prjGroupOperaType: prjGroupOperaType, NodeID: NodeID };
+        CodeOperaMethod('PDM/prjManege/prjGroupDataManage.ashx', jsonData);
+        //重新加载store信息
+        prjGroupStore.reload();
+        prjGroupTablePanel.store.reload();
+    }
+}
+var prjGroupProxy = new Ext.data.HttpProxy({
+    url: 'PDM/prjManege/prjGroupTablePanelData.aspx'
+    //method: 'GET'
+});
+
+var prjGroupReader = new Ext.data.JsonReader(
+                    { root: 'rows', totalProperty: 'results' },
+                        [
+                        { name: "ID" },
+                         { name: "项目组编号" },
+                         { name: "项目组名称" },
+                         { name: "项目名称" },
+                         { name: "项目组权限" },
+                         { name: "项目组成员" },
+                         { name: "项目组备注" },
+                         { name: "任务描述" },
+                         { name: "项目组创建日期" },
+                         { name: "负责人" }
+                        ]
+                    );
+
+var prjGroupStore = new Ext.data.Store(
+                        { id: 'prjGroupStore', proxy: prjGroupProxy, reader: prjGroupReader }
+                    );
+var prjGrouppagenumber = new Ext.data.SimpleStore({
+    fields: ['id', 'genre'],
+    data: [['0', '10'], ['0', '20'], ['1', '30'], ['2', '40'], ['3', '50']]
+});
+
+var prjGroupPageNumberCombo = new Ext.form.ComboBox({
+    store: prjGrouppagenumber,
+    id: 'prjGrouppagenumber',
+    displayField: 'genre', //store字段中你要显示的字段，多字段必选参数，默认当mode为remote时displayField为undefine，当select列表时displayField为"text"
+    mode: 'local', //因为data已经取数据到本地了，所以'local',默认为"remote"，枚举完
+    emptyText: '每页记录数',
+    triggerAction: 'all',
+    width: 100,
+    listeners: {
+        "select": function () {
+            prjGroupPageSize = prjGroupPageNumberCombo.getValue();
+            prjGroupPageBar.pageSize = parseInt(prjGroupPageNumberCombo.getValue());
+            prjGroupStore.reload({ params: { start: 0, limit: prjGroupPageSize} });
+        }
+    }
+
+});
+
+var prjGroupPageBar = new Ext.PagingToolbar({
+    store: prjGroupStore,
+    pageSize: prjGroupPageSize,
+    displayInfo: true,
+    displayMsg: '总记录数 {0} - {1} of {2}',
+    emptyMsg: "没有记录",
+    id: 'prjGroupPageBar',
+    items: [prjGroupPageNumberCombo]
+});
+var prjGroupTablePanel = new Ext.grid.GridPanel({
+    title: '项目组管理',
+    id: "prjGroupTablePanel",
+    //  viewConfig: { autoFill: true },
+  //  region: 'center',
+    frame: true,
+    store: prjGroupStore,
+    height: 400,
+    tbar: prjGrouptbar,
+    bbar: prjGroupPageBar,
+    sm: new Ext.grid.CheckboxSelectionModel({ singleSelect: false }),
+    loadMask: true,
+    listeners: {//监听
+        "rowdblclick": prjGroupDataEdit
+    },
+    columns: [
+                    new Ext.grid.RowNumberer(),
+                    new Ext.grid.CheckboxSelectionModel({ singleSelect: false }),
+                    { header: 'ID', dataIndex: 'ID', sortable: true },
+                    { header: '项目组名称', dataIndex: '项目组名称', sortable: true },
+                    { header: '项目组编号', dataIndex: '项目组编号', sortable: true },
+                     { header: '负责人', dataIndex: '负责人', sortable: true },
+                    { header: '所属项目名称', dataIndex: '项目名称', sortable: true },
+                    { header: '项目组权限', dataIndex: '项目组权限', sortable: true },
+                    { header: '项目组成员', dataIndex: '项目组成员', sortable: true },
+                    { header: '项目组备注', dataIndex: '项目组备注', sortable: true },
+                    { header: '任务描述', dataIndex: '任务描述', sortable: true }
+
+            ]
+});
+prjGroupStore.load({ params: { start: 0, limit: prjGroupPageSize} });

@@ -1,0 +1,61 @@
+﻿var ProjectTaskTreeRoot = new Ext.tree.AsyncTreeNode({
+    text: '标准制造任务',
+    draggable: false,
+    expanded: true,
+    id: 'ProjectTaskTreeRoot'
+});
+var ProjectTaskTreeLoader = new Ext.tree.TreeLoader({
+    dataUrl: 'DataProcess.aspx?OperateType=ProjectTaskTreeNoCheckBox'
+});
+
+var ProjectTaskTreePanel = new Ext.tree.TreePanel({
+    title: "企业项目任务",
+    border: true,
+    collapsible: true,
+    border: true,
+    split: true,
+    // disabled: true,
+    //frame: true,
+    //layout: 'fit',
+    width: 150,
+    region: 'west',
+    root: ProjectTaskTreeRoot,
+    autoScroll: true,
+    animate: true,
+    loader: ProjectTaskTreeLoader,
+    rootVisible: false,
+    tools: [{
+        id: 'refresh',
+        handler: function () {
+            ProjectTaskTreeLoader.load(ProjectTaskTreeRoot);
+            ProjectTaskTreeRoot.expand();
+        }
+
+    }],
+    containerScroll: true,
+    listeners: {//监听
+        "click": function (node, e) {
+            taskStore.removeAll();
+            taskStore.baseParams.ProjectTaskID = node.id;
+            taskStore.baseParams.OperateType = "LoadtaskByPrjTree";
+            taskStore.load();
+            taskStore.reload();
+
+        }
+    }
+});
+
+ProjectTaskTreePanel.on('contextmenu', function (node, e) {
+    menu = new Ext.menu.Menu([{
+        text: "展开",
+        handler: function () {
+            node.expand(true, false);
+        }
+    }, {
+        text: "收缩",
+        handler: function () {
+            node.collapse(true, true);
+        }
+    }])
+    menu.showAt(e.getPoint());
+});

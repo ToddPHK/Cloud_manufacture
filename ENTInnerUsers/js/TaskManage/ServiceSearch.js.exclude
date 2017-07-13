@@ -1,0 +1,247 @@
+﻿//----------------------------------------两个服务数据集表-------------------------------------------------------
+Array.prototype.remove = function (dx) {
+    if (isNaN(dx) || dx > this.length) { return false; }
+    this.splice(dx, 1);
+}
+
+var NeedDeleteService = [];
+var NeedAddService = [];
+var Alternate_ServeProxy = new Ext.data.HttpProxy({
+    url: 'ServeList.aspx'
+    //method: 'GET'
+});
+
+var Alternate_ServeReader = new Ext.data.JsonReader(
+                    { root: 'rows', totalProperty: 'results' },
+                        [
+                        { name: "ServeID" },
+                         { name: "ServeName" },
+                          { name: "ServeType" },
+                         { name: "LifeCycle" }
+                        ]
+                    );
+
+var Alternate_ServeStore = new Ext.data.Store(
+                        {
+                            // autoLoad: { OperateType: "AllServe" },
+                            proxy: Alternate_ServeProxy,
+                            reader: Alternate_ServeReader
+                        }
+                    );
+
+
+var Alternate_ServeAdd_Grid = new Ext.grid.GridPanel({
+    region: 'center',
+    autoScroll: true,
+    store: Alternate_ServeStore,
+    title: '服务列表',
+    height: 200,
+    frame: true,
+    columns: [
+			{ header: '服务标识', dataIndex: 'ServeID', hidden: true },
+			{ header: '服务名称', dataIndex: 'ServeName', sortable: true },
+            { header: '面向周期', dataIndex: 'LifeCycle', sortable: true },
+			{ header: '服务类型', dataIndex: 'ServeType', sortable: true },
+            {
+                xtype: 'actioncolumn',
+                width: 40,
+                items: [{
+                    icon: '../../images/add.png',
+                    tooltip: '添加服务',
+                    handler: function (grid, rowIndex, colIndex) {
+                        var rec = Alternate_ServeStore.getAt(rowIndex);
+                        var ServeID = rec.get("ServeID");
+                        var needAddflag = true;
+                        for (i = 0; i < NeedDeleteService.length; i++) {
+                            if (ServeID == NeedDeleteService[i]) {
+                                needAddflag = false;
+                                NeedDeleteService.remove(i);
+                            }
+                        }
+                        if (needAddflag) {
+                            NeedAddService.push(ServeID);
+                        }
+                        AlreadyChoose_ServeStore.add(rec);
+                        Alternate_ServeStore.removeAt(rowIndex);
+                    }
+                }]
+            }
+
+		],
+    listeners: {
+        'rowdblclick': function (grid, rowIndex) {
+
+        }
+    }
+});
+
+
+
+
+var AlreadyChoose_ServeProxy = new Ext.data.HttpProxy({
+    url: 'ServeList.aspx'
+});
+
+var AlreadyChoose_ServeReader = new Ext.data.JsonReader(
+                    { root: 'rows', totalProperty: 'results' },
+                        [
+                        { name: "ServeID" },
+                         { name: "ServeName" },
+                          { name: "ServeType" },
+                         { name: "LifeCycle" }
+                        ]
+                    );
+
+var AlreadyChoose_ServeStore = new Ext.data.Store(
+                        {
+                            // autoLoad: { OperateType: "AlreadyChoosedService",TaskID: "uhj"},
+                            proxy: AlreadyChoose_ServeProxy,
+                            reader: AlreadyChoose_ServeReader
+                        }
+                    );
+
+//已选服务grid
+var AlreadyChoose_GridPanel = new Ext.grid.EditorGridPanel({
+    title: '已选服务',
+    autoScroll: true,
+    store: AlreadyChoose_ServeStore,
+    frame: true,
+    columns: [
+			{ header: '服务标识', dataIndex: 'ServeID', hidden: true },
+			{ header: '服务名称', dataIndex: 'ServeName', sortable: true },
+            { header: '面向周期', dataIndex: 'LifeCycle', sortable: true },
+			{ header: '服务类型', dataIndex: 'ServeType', sortable: true },
+             {
+                 xtype: 'actioncolumn',
+                 width: 40,
+                 items: [{
+                     icon: '../../images/delete.png',
+                     tooltip: '删除服务',
+                     handler: function (grid, rowIndex, colIndex) {
+
+                         var rec = AlreadyChoose_ServeStore.getAt(rowIndex);
+                         var ServeID = rec.get("ServeID");
+                         var needDeleteflag = true;
+                         for (i = 0; i < NeedAddService.length; i++) {
+                             if (ServeID == NeedAddService[i]) {
+                                 NeedAddService.remove(i);
+                                 needDeleteflag = false;
+                             }
+
+                         }
+                         if (needDeleteflag) {
+                             NeedDeleteService.push(ServeID);
+                         }
+                         Alternate_ServeStore.add(rec);
+                         AlreadyChoose_ServeStore.removeAt(rowIndex);
+
+                     }
+                 }]
+             }
+
+		]
+});
+
+//-------------------------------------------------------
+var TaskServeChoose_Panel = new Ext.Panel({
+    region: 'center',
+    layout: 'table',
+    layoutConfig: {
+        columns: 4 //设置表格布局默认列数为4列 
+    },
+    frame: false, //渲染面板 
+    width: 800,
+    height: 450,
+    defaults: {//设置默认属性 
+        height: 250
+    },
+    items: [
+       {
+           layout: "fit",
+           width: 340,
+           items: AdvancedSearchPanel,
+           height: 300
+       },
+    {
+        width: 440,
+        height: 300,
+        layout: "fit",
+        autoScroll: true,
+        items: Alternate_ServeAdd_Grid,
+        colspan: 3   //设置跨列 
+    },
+    {
+        layout: "fit",
+        width: 800,
+        height: 230,
+        items: AlreadyChoose_GridPanel,
+        colspan: 4
+    }
+   ]
+});
+
+
+var TaskServeChoose_Window = new Ext.Window({
+    layout: 'border',
+    title: '服务选择',
+    width: 800,
+    height: 600,
+    closeAction: 'hide',
+    draggable: true,
+    resizable: false,
+    shadow: true,
+    modal: true,
+    closable: true,
+    animCollapse: true,
+    buttonAlign: 'center',
+    items: TaskServeChoose_Panel,
+    buttons: [{
+        text: '保存',
+        //点击保存按钮后触发事件  
+        handler: function () {
+            SaveChoosedService();
+        }
+    }, {
+        text: '重置', handler: function () {
+            AlreadyChoose_ServeStore.removeAll();
+        }
+    }]
+});
+function showService_EditWindow(cell) {
+    var TaskID = cell.getTaskID();
+    // var TaskID = '45';
+    if (TaskID == null) {
+        Ext.Msg.alert("提示", "还没为该节点绑定任务！");
+    }
+    else {
+        Alternate_ServeStore.removeAll();
+        AlreadyChoose_ServeStore.removeAll();
+        Alternate_ServeStore.load({ params: { OperateType: "AllServe", TaskID: TaskID} });
+        AlreadyChoose_ServeStore.load({ params: { OperateType: "AlreadyChoosedService", TaskID: TaskID} });
+        Alternate_ServeStore.reload();
+        AlreadyChoose_ServeStore.reload();
+        TaskServeChoose_Window.TaskID = cell.getTaskID();
+
+        TaskServeChoose_Window.show();
+    }
+    // alert(TaskServeChoose_Window.TaskID);
+}
+
+
+function SaveChoosedService() {
+    /* alert("need delete " + NeedDeleteService.join());
+    alert("need add "+NeedAddService.join());
+    return;*/
+    if (AlreadyChoose_ServeStore.getCount() == 0)
+        Ext.Msg.alert("提示", "还没为该任务选择服务！");
+    else {
+
+        /*  var ServiceIDs = [];
+        AlreadyChoose_ServeStore.each(function (rec) {
+        ServiceIDs.push(rec.get("ServeID"));
+
+        })*/
+        var params = { OperateType: "AddServiceForTask", TaskID: TaskServeChoose_Window.TaskID, NeedAddServiceIDs: NeedAddService.join(), NeedDeleteServiceIDs: NeedDeleteService.join() };
+        CodeOperaMethod("ServeList.aspx", params);
+    }
+}

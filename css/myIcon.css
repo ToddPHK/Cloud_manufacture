@@ -1,0 +1,91 @@
+﻿.add-icon {
+    background-image:url(../images/page_add.png) !important;
+}
+.add1-icon {
+    background-image:url(../images/add.png) !important;
+}
+.delete-icon {
+    background-image:url(../images/page_del.png) !important;
+}
+.pass-icon {
+    background-image:url(../images/drop-yes.gif) !important;
+}
+.nopass-icon {
+    background-image:url(../images/drop-no.gif) !important;
+}
+.delete1-icon {
+    background-image:url(../images/delete.png) !important;
+}
+.search-icon {
+    background-image:url(../images/search.png) !important;
+}
+.edit-icon {
+    background-image:url(../images/page_edit.png) !important;
+}
+
+.save-icon {
+    background-image:url(../images/save.gif) !important;
+}
+.expand-icon {
+    background-image:url(../images/expand.png) !important;
+}
+.collapse-icon {
+    background-image:url(../images/collapse.png) !important;
+}
+.accept-icon {
+    background-image:url(../images/accept.png) !important;
+}
+.home-icon {
+    background-image:url(../images/home.png) !important;
+}
+.alarm-icon {
+    background-image:url(../images/alarm.png) !important;
+}
+.refresh-icon {
+    background-image:url(../images/refresh.png) !important;
+}
+.logout-icon {
+    background-image:url(../images/logout.png) !important;
+}
+.upload-icon {
+    background-image:url(../images/upload.gif) !important;
+}
+.download-icon {
+    background-image:url(../images/download.gif) !important;
+}
+.cargo-icon {
+    background-image:url(../images/cargo.gif) !important;
+}
+.dogo-icon {
+    background-image:url(../images/dogo.gif) !important;
+}
+.x-tree {
+    background:#fff !important;
+}
+.x-border-layout-ct {
+    background:transparent;
+}
+body.x-border-layout-ct {
+    background:#c3d5ed url(bg.gif) repeat-x left top !important;
+}
+.x-layout-split {
+    background-color:transparent !important;
+}
+
+.x-tree-node div.forum-ct{
+    background:#eee url(cmp-bg.gif) repeat-x;
+    margin-top:1px;
+    border-top:1px solid #ddd;
+    border-bottom:1px solid #ccc;
+    padding-top:2px;
+    padding-bottom:1px;
+}
+.x-tree-selected {
+    border:1px dotted #a3bae9;
+    background:#DFE8F6;
+}
+.x-tree-node .x-tree-selected a span{
+	background:transparent;
+	color:#15428b;
+    font-weight:bold;
+}

@@ -1,0 +1,56 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="TemplatePrieview.aspx.cs"
+    Inherits="PlatForm_Admin_WebPage_StandardTaskTypeTree_TemplatePrieview" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <link rel="Stylesheet" type="text/css" href="../../../ext-3.2.0/resources/css/ext-all.css" />
+    <script type="text/javascript" src="../../../ext-3.2.0/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="../../../ext-3.2.0/ext-all.js"></script>
+    <script type="text/javascript" src="../../../ext-3.2.0/src/locale/ext-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="../../../ext-3.2.0/extjsPlugins/ComboBoxTree.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+
+        function sleep(n) {
+            var start = new Date().getTime();
+            while (true) if (new Date().getTime() - start > n) break;
+        }
+
+       // var TemplateName = 'DieManuF';
+         var TemplateName = '<%=Session["TemplateName"]%>';
+        Ext.onReady(function () {
+            var win = new Ext.Window({
+                layout: 'fit',
+                width: 600,
+                height: 500,
+                modal: true,
+                closeAction: "hide"
+
+            })
+            function taskMould_Add() {
+
+                s = document.createElement("script");
+                s.type = "text/javascript";
+                s.src = "../../../TaskMould/" + TemplateName + ".js";
+                var head = document.getElementsByTagName("head")[0];
+                head.appendChild(s);
+            }
+            taskMould_Add();
+
+            while (Ext.getCmp(TemplateName) == undefined) {
+
+            }
+            var s = Ext.getCmp(TemplateName);
+            win.add(Ext.getCmp(TemplateName));
+            win.doLayout();
+            win.show();
+
+
+
+        });
+    </script>
+</body>
+</html>

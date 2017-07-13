@@ -1,0 +1,21 @@
+﻿
+function TemplatePreview(TemplateName) {
+    var TaskDicWordconn = Ext.lib.Ajax.getConnectionObject().conn;
+    TaskDicWordconn.open("POST", "DataProcess.aspx?OperateType=TemplatePreview", false);
+    TaskDicWordconn.send(null);
+    var html = TaskDicWordconn.responseText;
+
+    var TemplatePreview_Window = new Ext.Window({
+        //layout: 'fit',
+        width: 300,
+        height: 100,
+        modal: true,
+        closeAction: "hide",
+        title: '编辑对话框',
+        html: ' <html> <head><title></title> </head><body><div>dfgdf<div/></body> </html>'
+
+
+    });
+    TemplatePreview_Window.show();
+}
+

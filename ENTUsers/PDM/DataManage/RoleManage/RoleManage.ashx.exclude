@@ -1,0 +1,64 @@
+﻿<%@ WebHandler Language="C#" Class="RoleManage" %>
+
+using System;
+using System.Web;
+using System.Web.SessionState;
+
+public class RoleManage : IHttpHandler, IRequiresSessionState
+{
+
+    public void ProcessRequest(HttpContext context)
+    {
+        string sql = "";
+        string connectstr = context.Session["connectstr"].ToString();
+        string msg = "";
+
+        if (context.Request["OrgStructureOperaType"].Equals("MoveNode"))//项目组节点之间的拖放
+        {
+            if (!string.IsNullOrEmpty(context.Request["NodeID"]) && !string.IsNullOrEmpty(context.Request["TargetNodeID"]))
+            {
+                msg = "组织移动";
+                sql = "update DeptList set 上级部门='" + context.Request["TargetNodeID"].ToString().Trim() + "'  where 部门编号='" + context.Request["NodeID"] + "'";
+            }
+        }
+        else if (context.Request["OrgStructureOperaType"].Equals("EditNode"))//项目组节点之间的拖放
+        {
+            if (!string.IsNullOrEmpty(context.Request["NodeText"]) && !string.IsNullOrEmpty(context.Request["NodeID"]))
+            {
+                msg = "组织名修改";
+                sql = "update DeptList set 部门名称='" + context.Request["NodeText"].ToString().Trim() + "'  where 部门编号='" + context.Request["NodeID"] + "'";
+            }
+        }
+        else if (context.Request["OrgStructureOperaType"].Equals("DeleteNode"))
+        {
+            msg = "组织删除";
+            sql = "delete from DeptList    where 部门编号='" + context.Request["NodeID"] + "'";
+
+        }
+        else if (context.Request["OrgStructureOperaType"].Equals("AddNode"))
+        {
+            msg = "组织增加";
+            sql = "insert  into DeptList   (部门名称,部门编号,上级部门) values ('" + context.Request["newName"] + "','" + context.Request["CodeNum"] + "','" + context.Request["ParentNodeID"] + "')";
+
+        }
+        if (sqlExecute.sqlmanage.ExecuteSQL(sql, connectstr))
+        {
+            context.Response.Clear();
+            context.Response.Write(msg + "成功！");
+        }
+        else
+        {
+            context.Response.Clear();
+            context.Response.Write(msg + "失败！");
+        }
+    }
+
+    public bool IsReusable
+    {
+        get
+        {
+            return false;
+        }
+    }
+
+}

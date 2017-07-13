@@ -1,0 +1,60 @@
+﻿<%@ WebHandler Language="C#" Class="TaskVSNode" %>
+
+using System;
+using System.Web;
+using System.Web.SessionState;
+
+public class TaskVSNode : IHttpHandler, IRequiresSessionState
+{
+
+    public void ProcessRequest(HttpContext context)
+    {
+        context.Response.Write("success");
+        string connectstr = context.Session["connectstr"].ToString();
+        string sql = "";
+        string sql1 = "";
+        string operatype = context.Request["operatype"];
+        if (!string.IsNullOrEmpty(operatype))
+        {
+
+            if (operatype.Equals("BindingTask"))
+            {
+                sql = "update workflow set " +
+                    " workflow.modify('insert (attribute task{\"" + context.Request["TaskName"] + "\" } " +
+                    ",attribute taskID{\"" + context.Request["TaskID"] + "\" } " +
+                    ",attribute taskDescribe{\"" + context.Request["Description"] + "\" } " +
+                     ",attribute mystate{\"" + context.Request["TaskState"] + "\" } " +
+                    ")into (/mxGraphModel/root/Rect/mxCell)[1]')" +
+                    " where ID=" + context.Request["WorkFlowID"];
+               // sql1 = "insert into Task_WorkFlowNode (TaskID,NodeID,WorkFlowID)  values ("")";
+               // context.Response.Write("修改失败！");
+
+            }
+            if (!sql.Equals(""))
+            {
+                if (sqlExecute.sqlmanage.ExecuteSQL(sql, connectstr))
+                {
+                    context.Response.Clear();
+                    // context.Response.Write("插入成功！");
+
+                    context.Response.Write("failure");
+
+                }
+                else
+                {
+                    context.Response.Clear();
+                    context.Response.Write("success");
+                }
+            }
+        }
+    }
+
+    public bool IsReusable
+    {
+        get
+        {
+            return false;
+        }
+    }
+
+}

@@ -1,0 +1,222 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link rel="Stylesheet" type="text/css" href="ext-3.2.0/resources/css/ext-all.css" />
+    <script type="text/javascript" src="ext-3.2.0/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="ext-3.2.0/ext-all.js"></script>
+    <script type="text/javascript" src="ext-3.2.0/src/locale/ext-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="ext-3.2.0/extjsPlugins/synchro/ext-basex.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+        Ext.util.CSS.swapStyleSheet('theme', 'ext-3.2.0/resources/css/xtheme-slate.css');
+        Ext.QuickTips.init();
+        Ext.form.Field.prototype.msgTarget = 'side';
+        var uname = new Ext.form.TextField({
+            id: 'uname',
+            fieldLabel: '用户名',
+            name: 'name', //元素名称  
+            allowBlank: false, //不允许为空  
+            blankText: '用户名不能为空'//错误提示内容  
+        });
+        var pwd = new Ext.form.TextField({
+            id: 'pwd',
+            inputType: 'password',
+            fieldLabel: '密　码', 
+            maxLength: 20,
+            name: 'password',
+            allowBlank: false,
+            blankText: '密码不能为空'
+        });
+
+        Ext.onReady(function () {
+            //窗口
+            var loginform = new Ext.form.FormPanel({//管理员身份认证
+                baseCls: 'x-plain',
+                bodyStyle: 'padding:5px;',
+                labelAlign: 'right',
+                defaultType: 'textfield',
+                buttonAlign: 'center',
+                buttons: [{
+                    text: '登录',
+                    type: 'submit',
+                    id: 'sb',
+                    //定义表单提交事件  
+                    handler: save
+                }, {
+                    text: '信息修改',
+                    handler: function () {
+                        EditUserInf();             
+                    }
+                }, {
+                    text: '主页',
+                    handler: function () {
+                        window.document.location = '../index.aspx';
+                    }
+                }],
+                items: [uname, pwd]
+            });
+            var loginform1 = new Ext.form.FormPanel({
+                baseCls: 'x-plain',
+                // labelWidth: 80,
+                bodyStyle: 'padding:5px;',
+                labelAlign: 'right',
+                //            defaultType: 'textfield',
+                buttonAlign: 'center',
+                buttons: [{
+                    text: '登录',
+                    type: 'submit',
+                    id: 'sb',
+                    //定义表单提交事件  
+                    handler: CommonSave
+                }, {
+                    text: '重置',
+                    handler: function () {
+                    loginform1.form.reset();
+                    }
+                }/*, {
+                    text: '注册',
+                    handler: function () {
+                        window.location.href = 'CommonRegister.aspx';
+                        //  document.location = 'Register.aspx';
+                    }
+                }*/],
+                items: [{
+                    fieldLabel: '公司注册名',
+                    //  value: 'luo-fsdq',
+                    width: 130,
+                    allowBlank: false, //不允许为空 
+                    name: "databasename",
+                    xtype: "textfield"
+                }, {
+                    fieldLabel: '用户名',
+                    xtype: "textfield",
+                    //   value: '葛明',
+                    name: 'userName', //元素名称  
+                    //anchor:'95%',//也可用此定义自适应宽度  
+                    allowBlank: false, //不允许为空  
+                    //  value: "admin",
+                    blankText: '用户名不能为空'//错误提示内容  
+                }, {
+                    fieldLabel: '密码',
+                    xtype: "textfield",
+                    maxLength: 20,
+                    inputType: 'password',
+                    //  value: '111111',
+                    name: 'userPass', //元素名称   
+                    allowBlank: false, //不允许为空  
+                    blankText: '用户名不能为空'//错误提示内容  
+                }]
+            });
+            //分页Tab
+            var vartabs = new Ext.TabPanel({
+                region: 'center', //border布局，将页面分成东，南，西，北，中五部分，这里表示TabPanel放在中间
+                margins: '3330',
+                activeTab: 0,
+                defaults: {
+                    autoScroll: true
+                },
+                items: [{
+                    title: '个人/企业管理员',
+                    html: "<br/>",
+                    items: loginform
+                }, {
+                    title: '企业内部用户',
+                    items: loginform1
+                }, {
+                    title: '说明',
+                    html: '1、企业管理员是一个企业用户（需要在云平台服务器或本企业服务器上创建企业的项目任务数据库），负责云端企业项目、任务、人员等数据的管理维护，并代表云端企业与云平台进行任务和资源的申请和交易；<br/>2、企业内部用户只是云端企业内部的操作员工，只能登陆本平台提供的云端企业项目任务管理系统进行企业内部项目任务的操作；<br/>3、个人用户是哪些不需要建立企业项目任务数据库，但是希望能直接购买和使用云平台所提供的资源或服务的用户。'
+                }]
+            });
+            //处理提交
+            function EditUserInf() {
+                var userName = uname.getValue();
+                var userPass = pwd.getValue();
+                var conn1 = Ext.lib.Ajax.getConnectionObject().conn;
+                conn1.open("POST", "DataProcess.aspx?OperateType=EditUserInf&userName=" + userName + "&userPass=" + userPass, false);
+                conn1.send(null);
+                var responseText = conn1.responseText;
+                var result = Ext.util.JSON.decode(responseText);
+                if (result.success) {
+                     if (result.EntUser) {
+                        window.location.href = "UserInfEdit.aspx?userName=" + userName + "&userPass=" + userPass;
+                    }
+                    else {
+                        window.location.href = "LonlyPUserInfEdit.aspx?userName=" + userName + "&userPass=" + userPass;
+                    }
+                }
+                else {
+                    Ext.Msg.alert("提示", result.msg);
+                }
+            }
+            //个人或者企业管理员
+            function save() {
+                var userName = uname.getValue();
+                var userPass = pwd.getValue();
+                //验证合法后使用加载进度条  
+                if (loginform.form.isValid()) {
+                    //提交到服务器操作  
+                    loginform.form.submit({
+                        waitMsg: '正在进行登陆验证,请稍后...',
+                        url: 'Verify.ashx',
+                        waitTitle: '提示',
+                        method: 'post',
+                        params: {
+                            LoginType: "ENTUsers",
+                            databasename: userName,
+                            userName: userName,
+                            userPass: userPass
+                        },
+                        //提交成功的回调函数  
+                        success: function (form, action) {
+                               window.location.href = "../index.aspx";
+
+                        },
+                        //提交失败的回调函数  
+                        failure: function (form, action) {
+                            Ext.Msg.alert("提示", action.result.msg);
+                        }
+                    });
+                }
+            };
+            //企业内部用户
+            function CommonSave() { 
+                if (loginform1.form.isValid()) {
+                    //提交到服务器操作  
+                    loginform1.form.submit({
+                        waitMsg: '正在进行登陆验证,请稍后...',
+                        url: "Verify.ashx",
+                        waitTitle: '提示',
+                        params: {
+                            LoginType: "ENTInnerUsers"
+                        },
+                        success: function (form, action) {
+                            window.location.href = "ENTInnerUsers/index.aspx";
+                        },
+                        //提交失败的回调函数  
+                        failure: function (form, action) {
+                            Ext.Msg.alert("提示", action.result.msg);
+                        }
+                    });
+                }
+            };
+
+            var win = new Ext.Window({
+                title: '云平台用户登录',
+                width: 400,
+                height: 220,
+                layout: 'fit',
+                plain: true,
+                resizable: false,
+                draggable: false,
+                bodyStyle: 'padding:5px;',
+                buttonAlign: 'center',
+                items: vartabs,
+                closable: false
+            });
+            win.show();
+        });
+    </script>
+</body>
+</html>

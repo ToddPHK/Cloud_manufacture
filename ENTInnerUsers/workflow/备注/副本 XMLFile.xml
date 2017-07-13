@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Task Type ="workS" name="模柄热处理"  Pmethod="HT"   phase="M" >
+  <BelongPart>30</BelongPart>
+  <ReleaseTime>12年03月22日</ReleaseTime>
+  <PlanEndTime>12年03月21日</PlanEndTime>
+  <Description>爱人而</Description>
+  <Batch>1000</Batch>
+  <Accuracy>俄</Accuracy>
+  <Hardness>俄</Hardness>
+  <Creator>李**</Creator>
+  <RedHardness>俄</RedHardness>
+</Task>

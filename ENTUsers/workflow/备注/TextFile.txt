@@ -1,0 +1,9 @@
+﻿graph.getModel().getCell('28').getAttribute('label');//选择特定id的cell
+graph.selectAll();选择所有cell
+原始态---originalState==#00CC00绿
+等待态---waitState==#FFFF00 黄
+挂起态---suspendState==#FF00FF 粉红
+完成态---completeState==#009999 淡蓝
+进行态---ingState==#999900 
+抛弃态--abandonState==#FF0000 红
+var result = Ext.util.JSON.decode(response.responseText); 

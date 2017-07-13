@@ -1,0 +1,54 @@
+﻿<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <title>ExtJS.com Forums</title>
+
+    <link rel="Stylesheet" type="text/css" href="../ext-3.2.0/resources/css/ext-all.css" />
+    <link rel="Stylesheet" type="text/css" href="../css/myIcon.css" />
+    <script type="text/javascript" src="../ext-3.2.0/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="../ext-3.2.0/ext-all.js"></script>
+    <script type="text/javascript" src="../ext-3.2.0/src/locale/ext-lang-zh_CN.js"></script>
+        <script type="text/javascript" src="../ext-3.2.0/extjsPlugins/synchro/ext-basex.js"></script>
+    
+    <script type="text/javascript" src="TopicReplyWin.js"></script>
+        <script type="text/javascript" src="TopicWin.js"></script>
+            <script type="text/javascript" src="forum.js"></script>
+        <script type="text/javascript" src="../js/jsScoreStar/score.js"></script>
+    <link rel="stylesheet" type="text/css" href="forum.css" />
+
+</head>
+    <script type="text/javascript">
+        var UserType = '<%=Session["UserType"]%>';
+    </script>
+<body>
+    <table id="score" style="width: 200;">
+        <tr>
+            <td  style="width: 90px;">
+            </td>
+            <td>
+                <div id="GradeVoteArea">
+                </div>
+            </td>
+            <td style="width: 10px;">
+            </td>
+            <td align="center">
+            <center>
+                <div id="GradeVoteScore" style="width: 100;align:center;">
+                    请您评分</div>
+                    </center>
+            </td>
+        </tr>
+    </table>
+    <script type="text/javascript">
+        var WindowVote = new GradeVote();
+        WindowVote.GradeVoteImage1 = "../images/star_mark_big.gif";
+        WindowVote.GradeVoteImage2 = "../images/star_unmark_big.gif";
+        WindowVote.CreateVote(5, 2);
+        WindowVote.AddContent("很差");
+        WindowVote.AddContent("一般了");
+        WindowVote.AddContent("还不错");
+        WindowVote.AddContent("挺好的");
+        WindowVote.AddContent("非常好！");
+    </script>
+</body>
+</html>

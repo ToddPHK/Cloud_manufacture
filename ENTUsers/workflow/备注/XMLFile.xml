@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<mxGraphModel>
+  <root>
+    <Diagram label="My Diagram" href="http://www.mxgraph.com/" id="0">
+      <mxCell/>
+    </Diagram>
+    <Layer label="Default Layer" id="1">
+      <mxCell parent="0"/>
+    </Layer>
+    <Shape label="开始" href="" id="25">
+      <mxCell style="ellipse" parent="1" vertex="1">
+        <mxGeometry x="90" y="130" width="40" height="40" as="geometry"/>
+      </mxCell>
+    </Shape>
+    <Rect label="流程1" href="" id="26">
+      <mxCell style="image=E:\cloudPDM\workflow20110829\images\actor.gif" parent="1" vertex="1" mytext="撒" mystate="已完成">
+        <mxGeometry x="200" y="130" width="80" height="40" as="geometry"/>
+      </mxCell>
+    </Rect>
+    <Shape label="结束" href="" id="27">
+      <mxCell style="ellipse" parent="1" vertex="1">
+        <mxGeometry x="730" y="130" width="40" height="40" as="geometry"/>
+      </mxCell>
+    </Shape>
+    <Rect label="流程2" href="" id="28">
+      <mxCell parent="1" vertex="1" mytext="打算打算" mystate="正在进行">
+        <mxGeometry x="360" y="130" width="80" height="40" as="geometry"/>
+      </mxCell>
+    </Rect>
+    <Rect label="流程3" href="" id="29">
+      <mxCell parent="1" vertex="1" mytext="撒刚开始打 " mystate="未完成">
+        <mxGeometry x="530" y="130" width="80" height="40" as="geometry"/>
+      </mxCell>
+    </Rect>
+    <Rect label="支流程1" href="" id="30">
+      <mxCell parent="1" vertex="1">
+        <mxGeometry x="200" y="220" width="80" height="40" as="geometry"/>
+      </mxCell>
+    </Rect>
+    <Rect label="支流程2" href="" id="31">
+      <mxCell parent="1" vertex="1">
+        <mxGeometry x="360" y="220" width="80" height="40" as="geometry"/>
+      </mxCell>
+    </Rect>
+    <Rect label="流程3" href="" id="32">
+      <mxCell parent="1" vertex="1">
+        <mxGeometry x="530" y="220" width="80" height="40" as="geometry"/>
+      </mxCell>
+    </Rect>
+    <mxCell id="33" value="" style="gradientColor=#00FF00;strokeColor=#00FFFF" parent="1" source="25" target="26" edge="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="34" value="" style="gradientColor=#00FF00;strokeColor=#00FF00" parent="1" source="26" target="28" edge="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="37" value="" parent="1" source="26" target="30" edge="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="38" value="" parent="1" source="30" target="31" edge="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="39" value="" parent="1" source="31" target="32" edge="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="40" value="" style="strokeColor=#00FF00" parent="1" source="28" target="29" edge="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="41" value="" parent="1" source="32" target="29" edge="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="42" value="" style="gradientColor=#00FF00" parent="1" source="29" target="27" edge="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+  </root>
+</mxGraphModel>
+
+
